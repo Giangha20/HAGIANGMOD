@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HÀ GIANG MOD</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-1: #0f172a;
+      --bg-2: #1e293b;
+      --card: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.14);
+      --text: #ffffff;
+      --muted: #cbd5e1;
+      --accent: #7c3aed;
+      --accent-2: #22d3ee;
+      --shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+      overflow-x: hidden;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .bg-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: 0.45;
+      animation: floatOrb 10s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .orb-1 {
+      width: 240px;
+      height: 240px;
+      background: #7c3aed;
+      top: -60px;
+      left: -40px;
+    }
+
+    .orb-2 {
+      width: 280px;
+      height: 280px;
+      background: #06b6d4;
+      right: -60px;
+      top: 20%;
+      animation-delay: 2s;
+    }
+
+    .orb-3 {
+      width: 220px;
+      height: 220px;
+      background: #ec4899;
+      bottom: -50px;
+      left: 30%;
+      animation-delay: 4s;
+    }
+
+    .container {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 24px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 420px;
+      padding: 32px 22px;
+      text-align: center;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: var(--shadow);
+      animation: cardFloat 4s ease-in-out infinite;
+    }
+
+    .avatar-wrap {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 18px;
+    }
+
+    .avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      position: relative;
+      z-index: 2;
+      border: 4px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      display: block;
+    }
+
+    .avatar-ring {
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      z-index: 1;
+      animation: spinRing 5s linear infinite;
+    }
+
+    h1 {
+      font-size: 30px;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .bio {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .top-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .key-btn {
+      display: block;
+      text-decoration: none;
+      color: white;
+      padding: 14px 16px;
+      border-radius: 16px;
+      font-weight: 700;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .key-btn:hover {
+      transform: translateY(-4px);
+      opacity: 0.96;
+    }
+
+    .key-green {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+    }
+
+    .key-blue {
+      background: linear-gradient(135deg, #38bdf8, #2563eb);
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .link {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      border-radius: 18px;
+      text-decoration: none;
+      color: var(--text);
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      transition: transform 0.3s ease, box-shadow 0.3s ease,
+        border-color 0.3s ease, background 0.3s ease;
+    }
+
+    .link::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -120%;
+      width: 80%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.22),
+        transparent
+      );
+      transition: left 0.6s ease;
+    }
+
+    .link:hover::before {
+      left: 130%;
+    }
+
+    .link:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 16px 28px rgba(0, 0, 0, 0.22);
+      border-color: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .thumb {
+      width: 60px;
+      height: 60px;
+      min-width: 60px;
+      max-width: 60px;
+      border-radius: 12px;
+      object-fit: cover;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .link-text {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .link-text strong {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .link-text small {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .arrow {
+      font-size: 20px;
+      opacity: 0.85;
+      transition: transform 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    .link:hover .arrow {
+      transform: translateX(4px);
+    }
+
+    .intro-box {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: left;
+    }
+
+    .intro-box h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .intro-box p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+
+    .intro-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      animation: revealUp 0.9s ease forwards;
+    }
+
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+    .delay-6 { animation-delay: 0.6s; }
+    .delay-7 { animation-delay: 0.7s; }
+    .delay-8 { animation-delay: 0.8s; }
+    .delay-9 { animation-delay: 0.9s; }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes floatOrb {
+      0%, 100% {
+        transform: translateY(0) translateX(0) scale(1);
+      }
+      50% {
+        transform: translateY(20px) translateX(12px) scale(1.08);
+      }
+    }
+
+    @keyframes spinRing {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes cardFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 16px 12px 24px;
+      }
+
+      .card {
+        padding: 26px 16px;
+        border-radius: 24px;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+
+      .bio {
+        font-size: 14px;
+      }
+
+      .link {
+        padding: 14px;
+      }
+
+      .thumb {
+        width: 54px;
+        height: 54px;
+        min-width: 54px;
+        max-width: 54px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <main class="container">
+    <section class="card">
+      <div class="avatar-wrap reveal delay-1">
+        <img src="2025_11_11_21_33_IMG_0006.JPG" class="avatar" alt="Avatar">
+        <span class="avatar-ring"></span>
+      </div>
+
+      <h1 class="reveal delay-2">HÀ GIANG MOD</h1>
+      <p class="bio reveal delay-3">Chia sẻ Mod app (Hack Game IOS)</p>
+
+      <div class="top-buttons">
+        <a href="https://authtool.app/get-key/?code=8919a94a-f8ad-4918-8653-20b626b229e0" class="key-btn key-green reveal delay-4">
+          🔑 Lấy Key Liên Quân
+        </a>
+
+        <a href="https://ios.codevn.net/" class="key-btn key-blue reveal delay-5">
+          🔑 Kho IPA (nguồn: IOS CODE VN)
+        </a>
+      </div>
+
+      <div class="links">
+        <a href="https://www.mediafire.com/file/8btdtpcxft07k1e/FC+Mobile+VN_26.0.09_1771141049.ipa/file" class="link reveal delay-6">
+          <img src="FC Mobile.png" class="thumb" alt="FC Mobile">
+          <div class="link-text">
+            <strong>FC Mobile IPA</strong>
+            <small>Crack No Key</small>
+          </div>
+          <div class="arrow">→</div>
+        </a>
+
+        <a href="https://i.authtool.app/ios/694be3daa957dec3777073c9" class="link reveal delay-7">
+          <img src="3jMRNKb.jpeg" class="thumb" alt="Hack Map Liên Quân">
+          <div class="link-text">
+            <strong>Hack Map Liên Quân IOS</strong>
+            <small>Cre: SOIMAP AOV</small>
+          </div>
+          <div class="arrow">→</div>
+        </a>
+
+        <a href="https://ios.cfw.guide/installing-trollstore/" class="link reveal delay-8">
+          <img src="trollstore.jpg" class="thumb" alt="Trollstore X">
+          <div class="link-text">
+            <strong>Trollstore X</strong>
+            <small>Hỗ trợ iOS 14.0 đến 16.6.1, cài IPA không cần chứng chỉ</small>
+          </div>
+          <div class="arrow">→</div>
+        </a>
+
+        <a href="https://sign.certvn.com/" class="link reveal delay-9">
+          <img src="but.png" class="thumb" alt="Ký app trực tiếp">
+          <div class="link-text">
+            <strong>Ký app trực tiếp</strong>
+            <small>Cài app trên web trực tiếp thông qua chứng chỉ</small>
+          </div>
+          <div class="arrow">→</div>
+        </a>
+
+        <a href="ESignCert.zip" class="link reveal delay-9">
+          <img src="dow.jpg" class="thumb" alt="File Chứng Chỉ">
+          <div class="link-text">
+            <strong>File Chứng Chỉ</strong>
+            <small>Dùng để ký app</small>
+          </div>
+          <div class="arrow">→</div>
+        </a>
+
+        <a href="khoindvn.io.vn.mobileconfig" class="link reveal delay-9">
+          <img src="flaash.png" class="thumb" alt="DNS chống thu hồi">
+          <div class="link-text">
+            <strong>Link cài DNS chống thu hồi</strong>
+            <small>Chống thu hồi chứng chỉ</small>
+          </div>
+          <div class="arrow">→</div>
+        </a>
+      </div>
+
+      <div class="intro-box reveal delay-9">
+        <h2>Giới thiệu website</h2>
+        <p>
+          Website này được tạo để chia sẻ ứng dụng iOS, IPA, mod app và các công cụ hữu ích cho iPhone.
+        </p>
+        <p>
+          Bạn có thể tìm thấy game mod, công cụ hỗ trợ, file chứng chỉ và các hướng dẫn cài đặt nhanh trên thiết bị iOS.
+        </p>
+        <p>
+          Một số ứng dụng có thể yêu cầu lấy key trước khi tải để hạn chế spam và giữ hệ thống ổn định hơn.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const links = document.querySelectorAll(".link");
+
+    links.forEach((link) => {
+      link.addEventListener("mouseenter", () => {
+        link.style.transform = "translateY(-6px) scale(1.02)";
+      });
+
+      link.addEventListener("mouseleave", () => {
+        link.style.transform = "";
+      });
+    });
+  </script>
+</body>
+</html>
